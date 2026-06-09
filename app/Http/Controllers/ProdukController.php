@@ -32,15 +32,36 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
-    Produk::create([
-        'nama' => $request->nama,
-        'id_kategori' => $request->kategori,
-        'qty' => $request->qty,
-        'harga_beli' => $request->beli,
-        'harga_jual' => $request->jual,
-    ]);
-    return redirect()->route('produk.index');
-    }  
+     
+        $aturan = [
+            'nama'     => 'required',
+            'kategori' => 'required',
+            'qty'      => 'required|numeric',
+            'beli'     => 'required|numeric',
+            'jual'     => 'required|numeric',
+        ];
+
+       
+        $pesan = [
+            'required' => 'Data ini Wajib Diisi !',
+            'numeric'  => 'Mohon isi dengan angka',
+        ];
+
+        
+        $this->validate($request, $aturan, $pesan);
+
+        
+        produk::create([
+            'nama'        => $request->nama,
+            'id_kategori' => $request->kategori,
+            'qty'         => $request->qty,
+            'harga_beli'  => $request->beli,
+            'harga_jual'  => $request->jual,
+        ]);
+
+        
+        return redirect()->route('produk.index');
+    }
     
     
     /**
